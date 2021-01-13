@@ -2,86 +2,67 @@
 
 1. このリポジトリの master ブランチをチェックアウトする
 
-1. php コンテナのユーザ ID をホスト側と合わせるためのファイル .env を作成する
+1. app コンテナのユーザ ID をホスト側と合わせるためのファイル .env を作成する
 
-   1. どこでもよいのでコマンドラインで下記のコマンドを実行する
-
-      ```
-      id -u
-      ```
-
-   1. docker-compose.yml があるディレクトリで、下記のコマンドの 1000 の値を id -u で調べた値に書き換えて実行する
-
-      ```
-      # 1000 の値を id -u で調べた値に書き換えて実行する
-      echo DOCKER_UID=1000 > .env
-      ```
-
-   - docker-compose.yml があるディレクトリに .env ファイルが作成されたら成功
+   - docker-compose.yml があるディレクトリで下記のコマンドを実行する
 
      ```
-     # .env は隠しファイルなので ls -a で視認できる
-     ls -a
-     .  ..  .env  .git  .gitignore  README.md  docker  docker-compose.yml  html
+     # `id -u` の実行結果はホストによって異なる
+     echo DOCKER_UID=`id -u` > .env
      ```
 
-   - Linux ではユーザ ID が異なるとコンテナで作成したファイルをホスト側で編集できなくなる
-   - Mac はユーザ権限が独特なためユーザ ID を一致させる必要はないとの説もある
-   - Windows の人は WSL (Windows Subsystem for Linux) を使おう
-
-1. docker-compose.yml があるディレクトリで下記のコマンドを実行する。初回起動には時間がかかる
+1. docker-compose.yml があるディレクトリで下記のコマンドを実行する
 
    ```
+   # 各コンテナをキャッシュを使わずにビルドするコマンド
+   docker-compose build --no-cache
+
+   # 各コンテナをバックグラウンドで起動するコマンド
    docker-compose up -d
    ```
 
-   - 下記のようなメッセージが出たら成功
-
-     ```
-     Creating network "quelcode-cakephp_default" with the default driver
-     Creating quelcode-cakephp_phpmyadmin_1 ... done
-     Creating quelcode-cakephp_nginx_1      ... done
-     Creating quelcode-cakephp_mysql_1      ... done
-     Creating quelcode-cakephp_php_1        ... done
-     ```
-
-1. 起動中の php コンテナの bash を実行する
+1. 起動中の app コンテナの bash を、app コンテナのユーザ"docker"の権限で実行する
 
    ```
-   docker-compose exec php bash
+   # appコンテナのユーザ"docker"の権限でappコンテナのbashを実行するコマンド
+   docker-compose exec --user docker app bash
    ```
 
-   - 下記のようなプロンプトに切り替われば成功
+   - 下記のようなプロンプトに切り替わる
 
      ```
-     docker@df8275e6f1f9:/var/www/html$
+     docker@efba441bb520:/var/www/html$
      ```
 
-1. php コンテナの bash で cakephp を install する
+1. app コンテナの bash で laravelapp を install する
 
-   1. php コンテナの bash で /var/www/html/mycakeapp に移動する
+   1. app コンテナの bash で /var/www/html/laravelapp に移動する
 
       ```
-      docker@df8275e6f1f9:/var/www/html$ cd mycakeapp
-      docker@df8275e6f1f9:/var/www/html/mycakeapp$
+      docker@efba441bb520:/var/www/html$ cd laravelapp/
+      docker@efba441bb520:/var/www/html/laravelapp$
       ```
 
    1. composer install を実行する
 
       ```
-      docker@e6e656dc2f0d:/var/www/html/mycakeapp$ composer install
+      docker@efba441bb520:/var/www/html/laravelapp$ composer install
       ```
 
-      - こちらも時間がかかる。質問プロンプトが出たら Y と回答する
+   1. storage フォルダの制限を緩和する
 
-        ```
-        Set Folder Permissions ? (Default to Y) [Y,n]? Y
-        ```
+      ```
+      docker@efba441bb520:/var/www/html/laravelapp$ chmod 777 -R storage
+      ```
 
-1. cakephp アプリをブラウザで表示する
+1. laravelapp をブラウザで表示する
 
-   - http://localhost:10380 にアクセスして cakephp の赤いページが表示されたらセットアップ成功
+   - http://localhost:10480 にアクセスする
    - このセットアップ手順により CakePHP 超入門 Chapter1 の環境構築作業を飛ばせる
+
+## ここまで書いた
+
+---
 
 ## 備考
 
