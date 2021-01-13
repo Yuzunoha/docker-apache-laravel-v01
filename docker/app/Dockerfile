@@ -14,7 +14,8 @@ RUN apt-get update \
   && apt-get install -y sudo \
   && apt-get install -y vim \
   && apt-get install -y libicu-dev \
-  && docker-php-ext-install pdo_mysql intl mbstring
+  && apt-get install -y libonig-dev \
+  && docker-php-ext-install pdo_mysql intl
 
 # ユーザを作成する
 RUN useradd -m ${DOCKER_USER} -u ${DOCKER_UID}
