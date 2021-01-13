@@ -6,7 +6,6 @@ services:
       args:
         DOCKER_UID: ${DOCKER_UID:-1000}
     volumes:
-      - ./docker/app/php.ini:/usr/local/etc/php/php.ini
       - ./html:/var/www/html
     ports:
       - 10480:80
