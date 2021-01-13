@@ -15,13 +15,16 @@
 
    - docker-compose.yml があるディレクトリで下記のコマンドを実行する
 
-     ```
-     # 各コンテナをキャッシュを使わずにビルドするコマンド
-     docker-compose build --no-cache
+     1. 各コンテナをキャッシュを使わずにビルドする
 
-     # 各コンテナをバックグラウンドで起動するコマンド
-     docker-compose up -d
-     ```
+        ```
+        docker-compose build --no-cache
+        ```
+
+     1. 各コンテナをバックグラウンドで起動する
+        ```
+        docker-compose up -d
+        ```
 
 1. 起動中の app コンテナの bash を、app コンテナのユーザ"docker"の権限で実行する
 
