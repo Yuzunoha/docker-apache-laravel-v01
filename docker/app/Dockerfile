@@ -1,10 +1,5 @@
 FROM php:7.4-apache
 
-# 変数を宣言する
-ARG DOCKER_UID=1000
-ARG DOCKER_USER=docker
-ARG DOCKER_PASSWORD=docker
-
 # 設定ファイルをdockerコンテナ内のPHP、Apacheに読み込ませる
 ADD php.ini /usr/local/etc/php/
 ADD 000-default.conf /etc/apache2/sites-enabled/
@@ -25,18 +20,5 @@ RUN apt-get update \
 RUN mv /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled
 RUN /bin/sh -c a2enmod rewrite
 
-# ユーザを作成する
-RUN useradd -m ${DOCKER_USER} -u ${DOCKER_UID}
-RUN echo "${DOCKER_USER}:${DOCKER_PASSWORD}" | chpasswd
-
-# 作成したユーザのサブグループにsudoを追加する
-RUN usermod -aG sudo ${DOCKER_USER}
-
-# 作成したユーザに切り替える
-# USER ${DOCKER_USER}
-
-# htmlディレクトリの読み書き権限を公開する
-RUN chmod 777 /var/www/html
-
-# 作業ディレクトリを変更する
-WORKDIR /var/www/html
+# htmlディレクトリの読み書き権限を設定する
+RUN chmod -R 777 /var/www/html
