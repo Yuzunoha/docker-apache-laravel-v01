@@ -64,6 +64,14 @@
 
    - http://localhost:10480 にアクセスする
 
+## コンテナを終了する方法
+
+- docker-compose.yml があるディレクトリで下記のコマンドを実行する
+
+  ```
+  docker-compose down
+  ```
+
 ## 備考
 
 - ホスト側で html 配下のファイルを編集すれば app コンテナに反映される
@@ -71,12 +79,20 @@
 
 ## artisan を使う方法
 
-- 例) migration を行う方法
+- 例 1) migration を行う方法
 
   - app コンテナの bash で /var/www/html/laravelapp に移動して下記のコマンドを実行する
 
     ```
     docker@efba441bb520:/var/www/html/laravelapp$ php artisan migrate
+    ```
+
+- 例 2) HelloController を作成する方法
+
+  - app コンテナの bash で /var/www/html/laravelapp に移動して下記のコマンドを実行する
+
+    ```
+    docker@efba441bb520:/var/www/html/laravelapp$ php artisan make:controller HelloController
     ```
 
 ## ブラウザで phpMyAdmin を表示する方法
