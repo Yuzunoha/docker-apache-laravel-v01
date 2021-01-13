@@ -35,5 +35,8 @@ RUN usermod -aG sudo ${DOCKER_USER}
 # 作成したユーザに切り替える
 # USER ${DOCKER_USER}
 
+# htmlディレクトリの読み書き権限を公開する
+RUN chmod 777 /var/www/html
+
 # 作業ディレクトリを変更する
 WORKDIR /var/www/html
